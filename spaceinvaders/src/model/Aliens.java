@@ -1,4 +1,4 @@
-package com.spaceinvedersremake.model;
+package model;
 
 import java.awt.Image;
 import java.awt.Rectangle;

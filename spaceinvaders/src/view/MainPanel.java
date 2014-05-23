@@ -1,4 +1,4 @@
-package com.spaceinvedersremake.view;
+package view;
 
 import javax.swing.JFrame;
 

@@ -1,4 +1,4 @@
-package com.spaceinvedersremake.view;
+package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,9 +16,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.spaceinvedersremake.model.Aliens;
-import com.spaceinvedersremake.model.Nave;
-import com.spaceinvedersremake.model.Tiro;
+import model.Aliens;
+import model.Nave;
+import model.Tiro;
 
 @SuppressWarnings("serial")
 public class Background extends JPanel implements ActionListener {

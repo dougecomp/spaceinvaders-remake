@@ -1,4 +1,4 @@
-package com.spaceinvedersremake.view;
+package view;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
