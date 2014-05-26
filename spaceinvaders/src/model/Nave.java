@@ -14,19 +14,20 @@ public class Nave {
 	private int dx, dy;
 	private int altura, largura;
 	private Image imagem;
-	private List<Tiro> tiros;
+	private Tiro tiro;
 	private boolean isVisible;
 	
 	public Nave(){
 		ImageIcon referencia = new ImageIcon("res\\nave1.gif");
-		imagem = referencia.getImage();
-		tiros = new ArrayList<Tiro>();
+		imagem = referencia.getImage();		
 		
 		this.x = 375;
 		this.y = 520;
 		
 		altura = imagem.getHeight(null);
 		largura = imagem.getWidth(null);
+		
+		tiro = null;
 	}
 	
 	public void mover(){
@@ -41,7 +42,12 @@ public class Nave {
 	}
 	
 	public void atira(){
-		this.tiros.add(new Tiro(x+largura/2, y-altura+50));
+		if(tiro == null){
+			tiro = new Tiro(x+largura/2, y-altura+50);
+		}
+		if(!tiro.isVisible()){
+			tiro = new Tiro(x+largura/2, y-altura+50);
+		}
 	}
 	
 	public void keyPressed(KeyEvent button){
@@ -51,10 +57,10 @@ public class Nave {
 			atira();
 		}
 		if(codeButton == KeyEvent.VK_LEFT){
-			dx = -1;
+			dx = -2;
 		}
 		if(codeButton == KeyEvent.VK_RIGHT){
-			dx = 1;
+			dx = 2;
 		}
 	}
 	
@@ -100,8 +106,8 @@ public class Nave {
 		return imagem;
 	}
 	
-	public List<Tiro> getTiros() {
-		return tiros;
+	public Tiro getTiro() {
+		return tiro;
 	}
 
 	public boolean isVisible() {

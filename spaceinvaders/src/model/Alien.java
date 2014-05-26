@@ -5,18 +5,20 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class Aliens {
+public class Alien {
 	
 	private Image imagem;
 	private int x, y, altura, largura;
 	private boolean isVisible;
 	private final int ALTURA_TELA = 600;
+	private int sentido;
 	
 	private int velocidade = 0;
 	
-	public Aliens(int x, int y){
+	public Alien(int x, int y){
 		this.x = x;
 		this.y = y;
+		sentido = 0;
 		
 		ImageIcon alien = new ImageIcon("res\\3D_UFO_spins.gif");
 		imagem = alien.getImage();
@@ -28,8 +30,18 @@ public class Aliens {
 	public void mover(){
 		if(this.y > ALTURA_TELA){
 			this.y = 0;
-		}else{
-			this.y += velocidade;
+		}else if(this.x <= 0 ){
+			this.y += 5*velocidade;
+			this.x += velocidade;
+			this.sentido = 0;
+		} else if(this.x > 0 && this.x < 743 && sentido == 0){ //indo pra direita
+			this.x += velocidade;
+		} else if(this.x > 0 && this.x < 743 && sentido == 1){ //indo pra esquerda
+			this.x -= velocidade;
+		} else if(this.x >= 743){
+			this.y += 5*velocidade;
+			this.x -= velocidade;
+			this.sentido = 1;
 		}
 	}
 

@@ -13,7 +13,7 @@ public class Tiro {
 	
 	//private static final int LARGURA_TELA = 500;
 	//private static final int ALTURA_TELA = 400;
-	private static final int VELOCIDADE = 2;
+	private static final int VELOCIDADE = 3;
 	
 	public Tiro(int x, int y){
 		
@@ -30,7 +30,7 @@ public class Tiro {
 	
 	public void mover(){
 		this.y -= VELOCIDADE;
-		if(this.y < 0){
+		if(this.y <= 0){
 			setVisible(false);
 		}
 	}

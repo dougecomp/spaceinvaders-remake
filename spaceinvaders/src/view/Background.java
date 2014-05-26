@@ -16,7 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import model.Aliens;
+import model.Alien;
 import model.Nave;
 import model.Tiro;
 
@@ -30,18 +30,7 @@ public class Background extends JPanel implements ActionListener {
 	private Nave nave;
 	private Timer timer;
 	private boolean inGame;
-	private int[][] coordenadas = { { 29, 2380 }, { 59, 2600 }, { 89, 1380 },
-			{ 109, 780 }, { 139, 1789 }, { 239, 880 }, { 259, 954 },
-			{ 50, 1456 }, { 150, 790 }, { 209, 1980 }, { 45, 560 }, { 70, 2100 },
-			{ 159, 930 }, { 80, 590 }, { 60, 3213 }, { 59, 940 }, { 30, 990 },
-			{ 200, 920 }, { 259, 900 }, { 50, 6604 }, { 90, 5401 }, { 220, 810 },
-			{ 20, 860 }, { 180, 740 }, { 128, 820 }, { 170, 2126 }, { 30, 700 },
-			{ 300, 920 }, { 328, 856 }, { 320, 4672 }, { 450, 760 }, { 470, 790 }, { 730, 1980 }, { 650, 5604 }, { 670, 4821 },
-			{ 456, 1456 }, { 732, 590 }, { 678, 530 }, { 520, 940 }, { 573, 990 },
-			{ 540, 920 }, { 722, 900 }, { 654, 660 }, { 612, 1345 }, { 419, 810 },
-			{ 600, 2765 }, { 750, 740 }, { 642, 820 }, { 449, 1987 }, { 667, 700 },
-			{ 500, 920 }, { 725, 856 }, { 618, 2800 } };
-	private List<Aliens> aliens;
+	private List<Alien> aliens;
 
 	// private final int QUANTIDADE_TIROS = 5;
 
@@ -71,7 +60,7 @@ public class Background extends JPanel implements ActionListener {
 			inicializaAliens();
 
 			nave = new Nave();
-			timer = new Timer(5, this);
+			timer = new Timer(15, this);
 			timer.start();
 		}
 
@@ -90,12 +79,18 @@ public class Background extends JPanel implements ActionListener {
 	}
 
 	public void inicializaAliens() {
-		aliens = new ArrayList<Aliens>();
-		Aliens al;
-		for (int i = 0; i < coordenadas.length; i++) {
-			al = new Aliens(coordenadas[i][0], coordenadas[i][1]);
-			al.setVelocidade(velocidade);
-			aliens.add(al);
+		aliens = new ArrayList<Alien>();
+		Alien al;
+		int x, y = 0;
+		for (int i = 0; i < 4; i++) {
+			y += 60;
+			x = 80;
+			for (int j = 0; j < 8; j++) {
+				x += 70;
+				al = new Alien(x, y);
+				al.setVelocidade(velocidade);
+				aliens.add(al);
+			}			
 		}
 	}
 
@@ -106,10 +101,10 @@ public class Background extends JPanel implements ActionListener {
 
 		// Checa a colisão dos aliens com a nave.
 		for (int i = 0; i < aliens.size(); i++) {
-			Aliens tempAlien = aliens.get(i);
+			Alien tempAlien = aliens.get(i);
 			formaAlien = tempAlien.getBounds();
 
-			if (formaNave.intersects(formaAlien)) {
+			if (formaNave.intersects(formaAlien) && nave.isVisible()) {
 				vidas--;
 				nave.setVisible(false);
 				tempAlien.setVisible(false);
@@ -118,52 +113,54 @@ public class Background extends JPanel implements ActionListener {
 		}
 
 		// Checa a colisão dos tiros com os aliens.
-		List<Tiro> tiros = nave.getTiros();
-
-		for (int i = 0; i < tiros.size(); i++) {
-			Tiro tempTiro = tiros.get(i);
-			formaTiro = tempTiro.getBounds();
-
+		Tiro tiro = nave.getTiro();
+		if(tiro != null && tiro.isVisible()){
+			formaTiro = tiro.getBounds();
 			for (int j = 0; j < aliens.size(); j++) {
-				Aliens tempAlien = aliens.get(j);
+				Alien tempAlien = aliens.get(j);
 				formaAlien = tempAlien.getBounds();
 
 				if (formaTiro.intersects(formaAlien)) {
-					tempAlien.setImagem(new ImageIcon("res\\Explosao.gif").getImage());
-					pontuacao++;
-					for(int k = 0; k < 2000; k++){
+					ImageIcon icon = new ImageIcon("res\\Explosao.gif");
+					tempAlien.setImagem(icon.getImage());
+					pontuacao++;					
+					
+					/*for(int k = 0; k < 2000; k++){
 						
-					}
+					}*/ 
 					tempAlien.setVisible(false);
-					tempTiro.setVisible(false);
+					tiro.setVisible(false);
 				}
-			}
+			}			
 		}
+			
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
-		if(vidas == 0){
+		if(vidas <= 0){
 			inGame = false;
+			repaint();
+			timer.stop();
 		}
 
 		if (aliens.size() == 0) {
 			velocidade++;
 			inicializaAliens();
 		}
-		List<Tiro> tiros = nave.getTiros();
-		for (int i = 0; i < tiros.size(); i++) {
-			Tiro t = tiros.get(i);
-			if (t.isVisible()) {
-				t.mover();
-			} else {
-				tiros.remove(i);
-			}
+		Tiro tiro = nave.getTiro();
+		if(tiro != null){
+			if (tiro.isVisible()) {
+				tiro.mover();
+			} 
+		} else {
+			tiro = null;
 		}
+		
 
 		for (int i = 0; i < aliens.size(); i++) {
-			Aliens al = aliens.get(i);
+			Alien al = aliens.get(i);
 			if (al.isVisible()) {
 				al.mover();
 			} else {
@@ -181,14 +178,13 @@ public class Background extends JPanel implements ActionListener {
 		if (inGame) {
 
 			grafico.drawImage(nave.getImagem(), nave.getX(), nave.getY(), this);
-			List<Tiro> tiros = nave.getTiros();
-			for (int i = 0; i < tiros.size(); i++) {
-				Tiro t = tiros.get(i);
-				grafico.drawImage(t.getImagem(), t.getX(), t.getY(), this);
-			}
+			
+			Tiro tiro = nave.getTiro();				
+			if(tiro != null && tiro.isVisible())
+				grafico.drawImage(tiro.getImagem(), tiro.getX(), tiro.getY(), this);		
 
 			for (int i = 0; i < aliens.size(); i++) {
-				Aliens al = aliens.get(i);
+				Alien al = aliens.get(i);
 				grafico.drawImage(al.getImagem(), al.getX(), al.getY(), this);
 			}
 			
