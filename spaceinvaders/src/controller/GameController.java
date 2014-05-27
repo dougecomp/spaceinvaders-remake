@@ -9,14 +9,9 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
-import composite.ImageComposite;
-import composite.ScreenComponent;
-import composite.StringComposite;
-import observer.GameListener;
-import observer.PlayerListener;
-import mediator.NaveColleague;
-import mediator.ImpactMediator;
 import mediator.AlienColleague;
+import mediator.ImpactMediator;
+import mediator.NaveColleague;
 import mediator.TiroColleague;
 import model.Alien;
 import model.Fase;
@@ -24,9 +19,20 @@ import model.Jogo;
 import model.JogoMarte;
 import model.Nave;
 import model.Tiro;
-import config.Configuracoes;
+import observer.GameListener;
+import observer.PlayerListener;
 import view.Background;
 import view.BigSpaceInvaders;
+
+import command.InputHandler;
+import command.LeftCommand;
+import command.RightCommand;
+import command.ShotCommand;
+import composite.ImageComposite;
+import composite.ScreenComponent;
+import composite.StringComposite;
+
+import config.Configuracoes;
 
 public class GameController implements ActionListener, GameListener {
 
@@ -34,7 +40,9 @@ public class GameController implements ActionListener, GameListener {
 	private Fase fase;
 	private String nivel;
 	private Timer timer;
+	@SuppressWarnings("unused")
 	private boolean inGame;
+	private InputHandler inputHandler;
 	
 	public GameController() {
 		nivel = "espaco";
@@ -136,16 +144,22 @@ public class GameController implements ActionListener, GameListener {
 	@Override
 	public void teclaApertada(KeyEvent evento) {
 		// TODO Auto-generated method stub
-		int codeButton = evento.getKeyCode();
-		if(codeButton == KeyEvent.VK_SPACE){
-			fase.getNave().atira();
-		}
-		if(codeButton == KeyEvent.VK_LEFT){
-			fase.getNave().setDx(-2);
-		}
-		if(codeButton == KeyEvent.VK_RIGHT){
-			fase.getNave().setDx(2);
-		}
+	int codeButton = evento.getKeyCode();
+//		if(codeButton == KeyEvent.VK_SPACE){
+//			fase.getNave().atira();
+//		}
+//		if(codeButton == KeyEvent.VK_LEFT){
+//			fase.getNave().setDx(-2);
+//		}
+//		if(codeButton == KeyEvent.VK_RIGHT){
+//			fase.getNave().setDx(2);
+//		}
+		
+		inputHandler = new InputHandler();
+		inputHandler.setShotButton(new ShotCommand(fase.getNave()));
+		inputHandler.setRightButton(new RightCommand(fase.getNave()));
+		inputHandler.setLeftButton(new LeftCommand(fase.getNave()));
+		inputHandler.handleInput(codeButton);
 	}
 
 	@Override
