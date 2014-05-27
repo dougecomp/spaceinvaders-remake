@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 
+import config.Configuracoes;
 import observer.TiroEvent;
 import observer.TiroListener;
 
@@ -24,9 +25,16 @@ public class Tiro {
 		
 		this.x = x;
 		this.y = y;
-
-		ImageIcon imTiro = new ImageIcon("res\\tiro2.png");
-		imagem = imTiro.getImage();
+		int resolucao = Configuracoes.getInstance().getResolucao();
+		if(resolucao ==1){
+			ImageIcon imTiro = new ImageIcon("res\\tiro2.png");
+			imagem = imTiro.getImage();
+			
+		}else{
+			ImageIcon imTiro = new ImageIcon("res\\tiro_2.png");
+			imagem = imTiro.getImage();
+		}
+		
 		altura = imagem.getHeight(null);
 		largura = imagem.getWidth(null);
 		isVisible = true;
