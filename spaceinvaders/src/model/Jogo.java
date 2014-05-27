@@ -36,10 +36,10 @@ public class Jogo {
 		int largura = Configuracoes.getInstance().getLargura();
 		int altura = Configuracoes.getInstance().getAltura();
 		for (int i = 0; i < 3; i++) {
-			y += Math.round(largura*0.1);
-			x = (int) Math.round(altura*0.1);
+			y += Math.round(largura*0.06);
+			x = (int) Math.round(altura*0.2);
 			for (int j = 0; j < 7; j++) {
-				x += Math.round(altura*0.1);	
+				x += Math.round(altura*0.13);	
 				fase.addInimigo(criaInimigo(x, y));
 			}			
 		}

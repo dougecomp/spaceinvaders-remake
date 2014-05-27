@@ -26,14 +26,27 @@ public class Nave implements TiroListener {
 	private ArrayList<PlayerListener> playerListeners = new ArrayList<PlayerListener>();
 	
 	public Nave(){
-		ImageIcon referencia = new ImageIcon("res\\nave1.gif");
-		imagem = referencia.getImage();		
 		
+		int resolucao = Configuracoes.getInstance().getResolucao();
+		float res_y = 0;
+		
+		if(resolucao==1){
+			
+			ImageIcon referencia = new ImageIcon("res\\nave1.gif");
+			imagem = referencia.getImage();	
+			res_y = (float) 1.5;
+		}else{
+			ImageIcon referencia = new ImageIcon("res\\nave_2.gif");
+			imagem = referencia.getImage();		
+			res_y = (float) 2.5;
+		}
+		
+			
 		altura = imagem.getHeight(null);
 		largura = imagem.getWidth(null);
 		
 		this.x = (int) (Configuracoes.getInstance().getLargura()*0.5);
-		this.y = (int) (Configuracoes.getInstance().getAltura() - 1.5*altura);
+		this.y = (int) (Configuracoes.getInstance().getAltura() - (res_y*altura));
 		
 		tiro = null;
 	}
