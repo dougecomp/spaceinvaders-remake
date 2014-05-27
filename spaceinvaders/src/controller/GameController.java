@@ -1,7 +1,6 @@
 package controller;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,6 +14,10 @@ import composite.ScreenComponent;
 import composite.StringComposite;
 import observer.GameListener;
 import observer.PlayerListener;
+import mediator.NaveColleague;
+import mediator.ImpactMediator;
+import mediator.AlienColleague;
+import mediator.TiroColleague;
 import model.Alien;
 import model.Fase;
 import model.Jogo;
@@ -169,41 +172,21 @@ public class GameController implements ActionListener, GameListener {
 		ArrayList<Alien> aliens = fase.getAliens();
 		Tiro tiro = nave.getTiro();
 		
-		Rectangle formaNave = nave.getBounds();
-		Rectangle formaAlien;
-		Rectangle formaTiro;
-
+		ImpactMediator im = new ImpactMediator();
+		im.setMe(new NaveColleague(im, nave));		
 		// Checa a colisão dos aliens com a nave.
-		for (int i = 0; i < aliens.size(); i++) {
-			Alien tempAlien = aliens.get(i);
-			formaAlien = tempAlien.getBounds();
-
-			if (formaNave.intersects(formaAlien) && nave.isVisible()) {
-				int vidas = nave.getVidas();
-				nave.setVidas(vidas--);
-				nave.setVisible(false);
-				tempAlien.setVisible(false);
-				//inGame = false;
-			}
-		}
-
+		for (int i = 0; i < aliens.size(); i++) {			
+			Alien tempAlien = aliens.get(i);	
+ 			im.verificarChoque(new AlienColleague(im, tempAlien)); 			
+		}		
+		
+		im = new ImpactMediator();
+		im.setMe(new TiroColleague(im, tiro));
 		// Checa a colisão do tiro com os aliens.		
-		if(tiro != null && tiro.isVisible()){
-			formaTiro = tiro.getBounds();
-			for (int j = 0; j < aliens.size(); j++) {
-				Alien tempAlien = aliens.get(j);
-				formaAlien = tempAlien.getBounds();
-
-				if(formaTiro.intersects(formaAlien)) {
-					ImageIcon icon = new ImageIcon("res\\Explosao.gif");
-					tempAlien.setImagem(icon.getImage());
-					tiro.disparaMatouAlien();
-					/*for(int k = 0; k < 2000; k++){
-						
-					}*/
-					tempAlien.setVisible(false);
-					tiro.setVisible(false);
-				}
+		if(tiro != null && tiro.isVisible()){			
+			for (int j = 0; j < aliens.size(); j++) {				
+				Alien tempAlien = aliens.get(j);				
+				im.verificarChoque(new AlienColleague(im, tempAlien));
 			}			
 		}			
 	}

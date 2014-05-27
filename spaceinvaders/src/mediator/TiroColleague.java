@@ -12,10 +12,12 @@ public class TiroColleague extends Colleague {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void receberImpacto(Colleague colleague) {
-		// TODO Auto-generated method stub
-		
+	public Tiro getTiro() {
+		return tiro;
+	}
+
+	public void setTiro(Tiro tiro) {
+		this.tiro = tiro;
 	}
 
 }

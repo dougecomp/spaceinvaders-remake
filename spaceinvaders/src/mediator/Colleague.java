@@ -8,9 +8,7 @@ public abstract class Colleague {
 	}
 
 	public void VerificarChoque() {
-		mediator.chocar( this );
+		mediator.verificarChoque( this );
 	}
-
-	public abstract void receberImpacto(Colleague colleague);
 	
 }

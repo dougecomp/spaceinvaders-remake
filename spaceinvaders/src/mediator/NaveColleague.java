@@ -12,10 +12,12 @@ public class NaveColleague extends Colleague {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void receberImpacto(Colleague colleague) {
-		// TODO Auto-generated method stub
-		
+	public Nave getNave() {
+		return nave;
+	}
+
+	public void setNave(Nave nave) {
+		this.nave = nave;
 	}
 
 }
