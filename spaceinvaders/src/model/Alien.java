@@ -22,11 +22,19 @@ public class Alien implements TiroListener, PlayerListener{
 	public Alien(int x, int y){
 		this.x = x;
 		this.y = y;
+		int resolucao = Configuracoes.getInstance().getResolucao();
 		
+		
+		if(resolucao==1){
 		ImageIcon alien = new ImageIcon("res\\3D_UFO_spins.gif");
 		imagem = alien.getImage();
+		}else{
+			ImageIcon alien = new ImageIcon("res\\3D_UFO_spins_2.gif");
+			imagem = alien.getImage();
+		}
 		this.altura = imagem.getHeight(null);
 		this.largura = imagem.getWidth(null);
+		
 		
 		isVisible = true;
 	}
@@ -35,20 +43,18 @@ public class Alien implements TiroListener, PlayerListener{
 		int largura = Configuracoes.getInstance().getLargura();
 		int altura = Configuracoes.getInstance().getAltura();
 		
-		if(this.y < 0) {
+		if(this.y < 0 || this.y > altura) {
 			this.y = 0;		
-		} else if( this.y > altura ){
-			this.y = 0;
 		} else if( this.x <= 0 ){
-			this.y += 5*velocidade;
-			this.x = 0 + velocidade;
+			this.y += this.altura*0.5 ;
+			this.x = 10 + velocidade;
 			this.sentido = 0;
 		} else if( this.x > 0 && this.x <= largura*0.9 && sentido == 0 ){ //indo pra direita
 			this.x += velocidade;
 		} else if( this.x > 0 && this.x <= largura*0.9 && sentido == 1 ){ //indo pra esquerda
 			this.x -= velocidade;
 		} else if( this.x > largura*0.9){
-			this.y += 5*velocidade;
+			this.y += this.altura*0.5;
 			this.x = (int) (largura*0.9 - velocidade);
 			this.sentido = 1;
 		}
