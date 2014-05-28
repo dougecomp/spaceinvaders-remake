@@ -26,12 +26,12 @@ import view.BigSpaceInvaders;
 
 import command.InputHandler;
 import command.LeftCommand;
+import command.ReinicioCommand;
 import command.RightCommand;
 import command.ShotCommand;
 import composite.ImageComposite;
 import composite.ScreenComponent;
 import composite.StringComposite;
-
 import config.Configuracoes;
 
 public class GameController implements ActionListener, GameListener {
@@ -43,6 +43,30 @@ public class GameController implements ActionListener, GameListener {
 	private Timer timer;
 	@SuppressWarnings("unused")
 	private boolean inGame;
+	public BigSpaceInvaders getBsi() {
+		return bsi;
+	}
+
+	public void setBsi(BigSpaceInvaders bsi) {
+		this.bsi = bsi;
+	}
+
+	public Background getView() {
+		return view;
+	}
+
+	public void setView(Background view) {
+		this.view = view;
+	}
+
+	public boolean isInGame() {
+		return inGame;
+	}
+
+	public void setInGame(boolean inGame) {
+		this.inGame = inGame;
+	}
+
 	private InputHandler inputHandler;
 	
 	public GameController() {
@@ -160,6 +184,7 @@ public class GameController implements ActionListener, GameListener {
 		int codeButton = evento.getKeyCode();
 			
 		inputHandler = new InputHandler();
+		inputHandler.setReinicioCommand(new ReinicioCommand(this));
 		inputHandler.setShotButton(new ShotCommand(fase.getNave()));
 		inputHandler.setRightButton(new RightCommand(fase.getNave()));
 		inputHandler.setLeftButton(new LeftCommand(fase.getNave()));
@@ -174,6 +199,7 @@ public class GameController implements ActionListener, GameListener {
 		if(codeButton == KeyEvent.VK_UP){
 			fase.getNave().setDy(0);
 		}
+		
 		if(codeButton == KeyEvent.VK_DOWN){
 			fase.getNave().setDy(0);
 		}
@@ -223,8 +249,14 @@ public class GameController implements ActionListener, GameListener {
 	 * @param componentes
 	 */
 	public void gameOver(ArrayList<ScreenComponent> componentes){
+		int resolucao = Configuracoes.getInstance().getResolucao();
+		ImageIcon ref =null;
 		inGame = false;
-		ImageIcon ref = new ImageIcon("res\\game_over800.png");
+		if(resolucao == 1){
+		 ref = new ImageIcon("res\\game_over800.png");
+		}else{
+		 ref = new ImageIcon("res\\game_over320.png");
+		}
 		Image gameOver = ref.getImage();
 		componentes.add(new ImageComposite(gameOver, 0, 0));
 		
