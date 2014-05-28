@@ -9,11 +9,15 @@ public class InputHandler {
 	private Command leftButton = new NullCommand();
 
 	private Command shotButton = new NullCommand();
-
+	
+	private Command reinicioButton = new NullCommand();
+	
 	public void handleInput(int codeEvent) {
 
 		if (codeEvent == KeyEvent.VK_SPACE) {
 			shotButton.execute();
+		}else if(codeEvent == KeyEvent.VK_ENTER){
+			reinicioButton.execute();
 		} else if (codeEvent == KeyEvent.VK_RIGHT) {
 			rightButton.execute();
 		} else if (codeEvent == KeyEvent.VK_LEFT) {
@@ -44,5 +48,11 @@ public class InputHandler {
 	public void setShotButton(Command shotButton) {
 		this.shotButton = shotButton;
 	}
+	public Command getReinicioButton() {
+		return reinicioButton;
+	}
 
+	public void setReinicioCommand(Command reinicioButton) {
+		this.reinicioButton = reinicioButton;
+	}
 }
