@@ -36,6 +36,7 @@ import config.Configuracoes;
 
 public class GameController implements ActionListener, GameListener {
 
+	public BigSpaceInvaders bsi;
 	private Background view;
 	private Fase fase;
 	private String nivel;
@@ -75,9 +76,13 @@ public class GameController implements ActionListener, GameListener {
 		}
 		fase.setNave(nave);
 		
-		BigSpaceInvaders bsi = new BigSpaceInvaders();
+		for(Alien a: fase.getAliens()){
+			a.calculaProximoTiro();
+		}
+		bsi = new BigSpaceInvaders();
 		
 		view = new Background(resolucao);
+		bsi.getComponents();
 		/*view.setBackgroundImage(fase.getBackground());*/
 		bsi.add(view);
 		view.addGameListener(this);
@@ -120,6 +125,14 @@ public class GameController implements ActionListener, GameListener {
 
 		for (int i = 0; i < aliens.size(); i++) {
 			Alien al = aliens.get(i);
+			Tiro tiroAlien = al.getTiro();
+			if(tiroAlien != null && tiroAlien.isVisible()){				
+				tiroAlien.mover();
+				componentes.add(new ImageComposite(tiroAlien.getImagem(), tiroAlien.getX(), tiroAlien.getY()));
+			} else {
+				al.setTiro(null);
+			}
+			
 			if (al.isVisible()) {
 				al.mover();
 				componentes.add(new ImageComposite(al.getImagem(), al.getX(), al.getY()));
@@ -144,17 +157,8 @@ public class GameController implements ActionListener, GameListener {
 	@Override
 	public void teclaApertada(KeyEvent evento) {
 		// TODO Auto-generated method stub
-	int codeButton = evento.getKeyCode();
-//		if(codeButton == KeyEvent.VK_SPACE){
-//			fase.getNave().atira();
-//		}
-//		if(codeButton == KeyEvent.VK_LEFT){
-//			fase.getNave().setDx(-2);
-//		}
-//		if(codeButton == KeyEvent.VK_RIGHT){
-//			fase.getNave().setDx(2);
-//		}
-		
+		int codeButton = evento.getKeyCode();
+			
 		inputHandler = new InputHandler();
 		inputHandler.setShotButton(new ShotCommand(fase.getNave()));
 		inputHandler.setRightButton(new RightCommand(fase.getNave()));
@@ -184,17 +188,16 @@ public class GameController implements ActionListener, GameListener {
 	public void checarColisao() {
 		Nave nave = fase.getNave();
 		ArrayList<Alien> aliens = fase.getAliens();
-		Tiro tiro = nave.getTiro();
-		
+		Tiro tiro = nave.getTiro();		
 		ImpactMediator im = new ImpactMediator();
+		
 		im.setMe(new NaveColleague(im, nave));		
 		// Checa a colisão dos aliens com a nave.
 		for (int i = 0; i < aliens.size(); i++) {			
 			Alien tempAlien = aliens.get(i);	
- 			im.verificarChoque(new AlienColleague(im, tempAlien)); 			
+ 			im.verificarChoque(new AlienColleague(im, tempAlien));
 		}		
 		
-		im = new ImpactMediator();
 		im.setMe(new TiroColleague(im, tiro));
 		// Checa a colisão do tiro com os aliens.		
 		if(tiro != null && tiro.isVisible()){			
@@ -202,7 +205,17 @@ public class GameController implements ActionListener, GameListener {
 				Alien tempAlien = aliens.get(j);				
 				im.verificarChoque(new AlienColleague(im, tempAlien));
 			}			
-		}			
+		}
+		
+		for (int j = 0; j < aliens.size(); j++) {
+			Alien tempAlien = aliens.get(j);
+			Tiro tiroAlien = tempAlien.getTiro();
+			im.setMe(new TiroColleague(im, tiroAlien));
+			if(tiroAlien != null && tiroAlien.isVisible()){
+				im.verificarChoque(new NaveColleague(im, nave));
+			}
+		}
+		
 	}
 	
 	/**
@@ -214,6 +227,7 @@ public class GameController implements ActionListener, GameListener {
 		ImageIcon ref = new ImageIcon("res\\game_over800.png");
 		Image gameOver = ref.getImage();
 		componentes.add(new ImageComposite(gameOver, 0, 0));
+		
 		view.repaint();			
 		timer.stop();
 	}
