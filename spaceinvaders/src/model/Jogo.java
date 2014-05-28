@@ -1,7 +1,5 @@
 package model;
 
-import java.math.MathContext;
-
 import config.Configuracoes;
 import model.Fase;
 

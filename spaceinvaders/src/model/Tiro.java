@@ -19,7 +19,7 @@ public class Tiro {
 	private boolean isVisible;
 	private ArrayList<TiroListener> tiroListeners = new ArrayList<TiroListener>();
 	
-	private static final int VELOCIDADE = 3;
+	private int velocidade = 3;
 	
 	public Tiro(int x, int y){
 		
@@ -42,8 +42,8 @@ public class Tiro {
 	}
 	
 	public void mover(){
-		this.y -= VELOCIDADE;
-		if(this.y <= 0){
+		this.y -= velocidade;
+		if(this.y <= 0 || this.y > Configuracoes.getInstance().getLargura()){
 			setVisible(false);
 		}
 	}
@@ -100,5 +100,15 @@ public class Tiro {
 	public Image getImagem() {
 		return imagem;
 	}
+
+	public int getVelocidade() {
+		return velocidade;
+	}
+
+	public void setVelocidade(int velocidade) {
+		this.velocidade = velocidade;
+	}
+	
+	
 
 }

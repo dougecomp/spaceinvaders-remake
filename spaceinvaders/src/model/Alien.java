@@ -18,7 +18,9 @@ public class Alien implements TiroListener, PlayerListener{
 	private boolean isVisible;
 	private int sentido = 0;	
 	private int velocidade = 1;
-	
+	private Tiro tiro;
+	private ThreadTiro threadTiro;
+
 	public Alien(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -26,8 +28,8 @@ public class Alien implements TiroListener, PlayerListener{
 		
 		
 		if(resolucao==1){
-		ImageIcon alien = new ImageIcon("res\\3D_UFO_spins.gif");
-		imagem = alien.getImage();
+			ImageIcon alien = new ImageIcon("res\\3D_UFO_spins.gif");
+			imagem = alien.getImage();
 		}else{
 			ImageIcon alien = new ImageIcon("res\\3D_UFO_spins_2.gif");
 			imagem = alien.getImage();
@@ -38,6 +40,14 @@ public class Alien implements TiroListener, PlayerListener{
 		
 		isVisible = true;
 	}
+	
+	public void calculaProximoTiro(){
+		threadTiro = new ThreadTiro(this);
+		Thread t = new Thread(threadTiro);
+		t.start();
+		
+	}
+
 	
 	public void mover(){
 		int largura = Configuracoes.getInstance().getLargura();
@@ -140,6 +150,22 @@ public class Alien implements TiroListener, PlayerListener{
 
 	public void setVelocidade(int velocidade) {
 		this.velocidade = velocidade;
+	}
+	
+	public int getSentido() {
+		return sentido;
+	}
+
+	public void setSentido(int sentido) {
+		this.sentido = sentido;
+	}
+
+	public Tiro getTiro() {
+		return tiro;
+	}
+
+	public void setTiro(Tiro tiro) {
+		this.tiro = tiro;
 	}
 
 }
