@@ -4,7 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class ImagemFlyweight {
+public class ImagemFlyweight extends SpriteFlyweight{
 	
 	protected String nomeImagem;
 	private Image imagem;
@@ -13,6 +13,7 @@ public class ImagemFlyweight {
 		nomeImagem = imagem;
 	}
 	
+	@Override
 	public Image desenhaImagem(){
 		ImageIcon imgIcon = new ImageIcon(nomeImagem);
 		return imagem = imgIcon.getImage();

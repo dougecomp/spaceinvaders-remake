@@ -5,14 +5,14 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import composite.ScreenComponent;
-
+import flyweight.FlyweightFactory;
+import flyweight.FlyweightFactory.Sprites;
 import observer.GameListener;
 
 @SuppressWarnings("serial")
@@ -29,19 +29,8 @@ public class Background extends JPanel {
 		setDoubleBuffered(true);
 		addKeyListener(new TecladoAdapter());
 		
-		if (res == 1) {
-			
-			ImageIcon imgBkgrd = new ImageIcon("res\\background 800x600.png");
-			background = imgBkgrd.getImage();
-				
-		}
-
-		if (res == 2) {
-			
-			ImageIcon imgBkgrd = new ImageIcon("res\\background 320x180.png");
-			background = imgBkgrd.getImage();
-
-		}
+		FlyweightFactory ff = new FlyweightFactory();
+		background = ff.getFlyweight(Sprites.CENARIO).desenhaImagem();
 
 	}
 

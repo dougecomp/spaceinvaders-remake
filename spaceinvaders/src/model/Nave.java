@@ -1,12 +1,12 @@
 package model;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
 import config.Configuracoes;
+import flyweight.FlyweightFactory;
+import flyweight.FlyweightFactory.Sprites;
+import flyweight.SpriteFlyweight;
 import observer.PlayerEvent;
 import observer.PlayerListener;
 import observer.TiroEvent;
@@ -28,31 +28,30 @@ public class Nave implements TiroListener {
 	public Nave(){
 		
 		int resolucao = Configuracoes.getInstance().getResolucao();
-		float res_y = 0;
+		float resY = 0;
 		
-		if(resolucao==1){
+		FlyweightFactory ff = new FlyweightFactory();
+		SpriteFlyweight sf = ff.getFlyweight(Sprites.NAVE);
+		imagem = sf.desenhaImagem();
+		
+		if(resolucao==1){				
+			resY = (float) 1.5;
 			
-			ImageIcon referencia = new ImageIcon("res\\nave1.gif");
-			imagem = referencia.getImage();	
-			res_y = (float) 1.5;
 		}else{
-			ImageIcon referencia = new ImageIcon("res\\nave_2.gif");
-			imagem = referencia.getImage();		
-			res_y = (float) 2.5;
+			resY = (float) 2.5;
 		}
-		
 			
 		altura = imagem.getHeight(null);
 		largura = imagem.getWidth(null);
 		
 		this.x = (int) (Configuracoes.getInstance().getLargura()*0.5);
-		this.y = (int) (Configuracoes.getInstance().getAltura() - (res_y*altura));
+		this.y = (int) (Configuracoes.getInstance().getAltura() - (resY*altura));
 		
 		tiro = null;
 	}
 	
 	public void mover() {
-		System.out.println(x + ", " + y);
+		//System.out.println(x + ", " + y);
 		x += dx;
 		
 		if(this.x <= 0)
@@ -111,10 +110,18 @@ public class Nave implements TiroListener {
 		return x;
 	}
 
+	public void setX(int x){
+		this.x = x;
+	}
+	
 	public int getY() {
 		return y;
 	}
 
+	public void setY(int y) {
+		this.y = y;
+	}
+	
 	public int getDx() {
 		return dx;
 	}

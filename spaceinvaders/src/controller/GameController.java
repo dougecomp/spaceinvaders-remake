@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 import mediator.AlienColleague;
@@ -16,14 +15,12 @@ import mediator.TiroColleague;
 import model.Alien;
 import model.Fase;
 import model.Jogo;
-import model.JogoMarte;
 import model.Nave;
 import model.Tiro;
 import observer.GameListener;
 import observer.PlayerListener;
 import view.Background;
 import view.BigSpaceInvaders;
-
 import command.InputHandler;
 import command.LeftCommand;
 import command.ReinicioCommand;
@@ -33,15 +30,15 @@ import composite.ImageComposite;
 import composite.ScreenComponent;
 import composite.StringComposite;
 import config.Configuracoes;
+import flyweight.FlyweightFactory;
+import flyweight.FlyweightFactory.Sprites;
 
 public class GameController implements ActionListener, GameListener {
 
 	public BigSpaceInvaders bsi;
 	private Background view;
 	private Fase fase;
-	private String nivel;
 	private Timer timer;
-	@SuppressWarnings("unused")
 	private boolean inGame;
 	public BigSpaceInvaders getBsi() {
 		return bsi;
@@ -70,27 +67,13 @@ public class GameController implements ActionListener, GameListener {
 	private InputHandler inputHandler;
 	
 	public GameController() {
-		nivel = "espaco";
 		timer = new Timer(15, this);
 	}
 	
 	public void iniciarJogo(){
 		int resolucao = Configuracoes.getInstance().getResolucao();
 		
-		Jogo jogo = null;
-		switch(nivel){
-			case "espaco":
-				jogo = new Jogo();
-				break;
-			
-			case "marte":
-				jogo = new JogoMarte();
-				break;
-				
-			default:
-				jogo = new Jogo();
-				break;
-		}		
+		Jogo jogo = new Jogo();		
 		
 		fase = jogo.montaFase();
 		
@@ -106,8 +89,7 @@ public class GameController implements ActionListener, GameListener {
 		bsi = new BigSpaceInvaders();
 		
 		view = new Background(resolucao);
-		bsi.getComponents();
-		/*view.setBackgroundImage(fase.getBackground());*/
+		
 		bsi.add(view);
 		view.addGameListener(this);
 		inGame = true;
@@ -233,6 +215,7 @@ public class GameController implements ActionListener, GameListener {
 			}			
 		}
 		
+		// Checa colisão dos tiros de alien com a nave
 		for (int j = 0; j < aliens.size(); j++) {
 			Alien tempAlien = aliens.get(j);
 			Tiro tiroAlien = tempAlien.getTiro();
@@ -249,16 +232,13 @@ public class GameController implements ActionListener, GameListener {
 	 * @param componentes
 	 */
 	public void gameOver(ArrayList<ScreenComponent> componentes){
-		int resolucao = Configuracoes.getInstance().getResolucao();
-		ImageIcon ref =null;
+		
 		inGame = false;
-		if(resolucao == 1){
-		 ref = new ImageIcon("res\\game_over800.png");
-		}else{
-		 ref = new ImageIcon("res\\game_over320.png");
-		}
-		Image gameOver = ref.getImage();
+		FlyweightFactory ff = new FlyweightFactory();
+		Image gameOver  = ff.getFlyweight(Sprites.GAMEOVER).desenhaImagem();		
 		componentes.add(new ImageComposite(gameOver, 0, 0));
+		
+		view.setImagens(componentes);
 		
 		view.repaint();			
 		timer.stop();

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import javax.swing.ImageIcon;
 
 import config.Configuracoes;
+import flyweight.FlyweightFactory;
+import flyweight.FlyweightFactory.Sprites;
 import observer.TiroEvent;
 import observer.TiroListener;
 
@@ -18,22 +20,15 @@ public class Tiro {
 	private int x, y, altura, largura;
 	private boolean isVisible;
 	private ArrayList<TiroListener> tiroListeners = new ArrayList<TiroListener>();
-	
 	private int velocidade = 3;
 	
 	public Tiro(int x, int y){
 		
 		this.x = x;
 		this.y = y;
-		int resolucao = Configuracoes.getInstance().getResolucao();
-		if(resolucao ==1){
-			ImageIcon imTiro = new ImageIcon("res\\tiro2.png");
-			imagem = imTiro.getImage();
-			
-		}else{
-			ImageIcon imTiro = new ImageIcon("res\\tiro_2.png");
-			imagem = imTiro.getImage();
-		}
+		
+		FlyweightFactory ff = new FlyweightFactory();
+		imagem = ff.getFlyweight(Sprites.TIRO).desenhaImagem();
 		
 		altura = imagem.getHeight(null);
 		largura = imagem.getWidth(null);
@@ -92,11 +87,19 @@ public class Tiro {
 	public int getX() {
 		return x;
 	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
 
 	public int getY() {
 		return y;
 	}
 
+	public void setY(int y) {
+		this.y = y;
+	}
+	
 	public Image getImagem() {
 		return imagem;
 	}

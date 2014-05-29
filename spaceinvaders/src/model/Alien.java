@@ -3,9 +3,9 @@ package model;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import javax.swing.ImageIcon;
-
 import config.Configuracoes;
+import flyweight.FlyweightFactory;
+import flyweight.FlyweightFactory.Sprites;
 import observer.PlayerEvent;
 import observer.PlayerListener;
 import observer.TiroEvent;
@@ -24,19 +24,12 @@ public class Alien implements TiroListener, PlayerListener{
 	public Alien(int x, int y){
 		this.x = x;
 		this.y = y;
-		int resolucao = Configuracoes.getInstance().getResolucao();
 		
+		FlyweightFactory ff = new FlyweightFactory();
+		imagem = ff.getFlyweight(Sprites.INIMIGO).desenhaImagem();
 		
-		if(resolucao==1){
-			ImageIcon alien = new ImageIcon("res\\3D_UFO_spins.gif");
-			imagem = alien.getImage();
-		}else{
-			ImageIcon alien = new ImageIcon("res\\3D_UFO_spins_2.gif");
-			imagem = alien.getImage();
-		}
 		this.altura = imagem.getHeight(null);
 		this.largura = imagem.getWidth(null);
-		
 		
 		isVisible = true;
 	}
