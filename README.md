@@ -3,4 +3,5 @@ Projeto do clone de space invaders implementado durante a graduação no semestr
 O intuito do projeto é utilizar padrões de projeto a fim de verificar a importância e onde melhor utilizá-los.
 
 Link da disciplina: https://sites.google.com/site/ecomppadroes20141/aulas
+
 Migrei o projeto do source forge para o github.
